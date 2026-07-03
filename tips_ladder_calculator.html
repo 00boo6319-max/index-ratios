@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIPS Ladder Maturity Calculator</title>
+<style>
+  :root{
+    --ink:#1c2321;
+    --ink-soft:#5a6360;
+    --ink-faint:#8b938f;
+    --paper:#fbfaf7;
+    --panel:#ffffff;
+    --line:#d8d4c8;
+    --line-strong:#b8b19f;
+    --accent:#3d5a4c;
+    --accent-soft:#e7ede9;
+    --warn:#8a5a2b;
+    --warn-soft:#f4ead9;
+    --mono: 'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+    --sans: 'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    padding:2.5rem 1.5rem 4rem;
+  }
+  .wrap{max-width:1180px; margin:0 auto;}
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:1rem;
+    margin-bottom:1.75rem;
+    flex-wrap:wrap;
+    gap:1rem;
+  }
+  header h1{
+    font-size:1.5rem;
+    font-weight:600;
+    margin:0 0 .25rem;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:.85rem;
+  }
+  .asof{
+    font-family:var(--mono);
+    font-size:.75rem;
+    color:var(--ink-faint);
+    text-align:right;
+  }
+  .controls{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-bottom:1.75rem;
+  }
+  .control{
+    background:var(--panel);
+    padding:.9rem 1rem;
+  }
+  .control label{
+    display:block;
+    font-size:.7rem;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-faint);
+    margin-bottom:.4rem;
+  }
+  .control .row{display:flex; align-items:center; gap:.6rem;}
+  .control input[type="range"]{flex:1; accent-color:var(--accent);}
+  .control .val{
+    font-family:var(--mono);
+    font-size:.95rem;
+    font-weight:600;
+    min-width:3.2rem;
+    text-align:right;
+  }
+  .control input[type="checkbox"]{width:16px; height:16px; accent-color:var(--accent);}
+  .checkline{display:flex; align-items:center; gap:.5rem; font-size:.8rem; color:var(--ink-soft);}
+
+  .table-scroll{
+    border:1px solid var(--line-strong);
+    overflow-x:auto;
+    background:var(--panel);
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.82rem;
+    min-width:1080px;
+  }
+  thead th{
+    text-align:right;
+    font-weight:600;
+    font-size:.68rem;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--ink-soft);
+    background:var(--accent-soft);
+    padding:.6rem .55rem;
+    border-bottom:1px solid var(--line-strong);
+    white-space:nowrap;
+  }
+  thead th:first-child, thead th:nth-child(2){text-align:left;}
+  tbody td{
+    padding:.5rem .55rem;
+    text-align:right;
+    border-bottom:1px solid var(--line);
+    font-family:var(--mono);
+    white-space:nowrap;
+  }
+  tbody td:first-child, tbody td:nth-child(2){
+    text-align:left;
+    font-family:var(--sans);
+  }
+  tbody tr:hover{background:#f5f3ee;}
+  .cusip{color:var(--ink-faint); font-family:var(--mono); font-size:.76rem;}
+  .maturity{font-weight:600;}
+  td input{
+    width:100%;
+    min-width:70px;
+    border:1px solid transparent;
+    background:transparent;
+    font-family:var(--mono);
+    font-size:.82rem;
+    text-align:right;
+    padding:.25rem .3rem;
+    color:var(--ink);
+    border-radius:3px;
+  }
+  td input:hover{border-color:var(--line-strong);}
+  td input:focus{
+    outline:none;
+    border-color:var(--accent);
+    background:#fff;
+  }
+  .total-cash{font-weight:600; color:var(--accent);}
+  tfoot td{
+    padding:.7rem .55rem;
+    font-family:var(--mono);
+    font-weight:600;
+    text-align:right;
+    border-top:2px solid var(--ink);
+    background:var(--accent-soft);
+  }
+  tfoot td:first-child{text-align:left; font-family:var(--sans);}
+
+  .foot-note{
+    margin-top:1.25rem;
+    font-size:.78rem;
+    color:var(--ink-soft);
+    line-height:1.6;
+    border-left:2px solid var(--warn);
+    background:var(--warn-soft);
+    padding:.75rem 1rem;
+  }
+  .foot-note strong{color:var(--warn);}
+  .actions{
+    margin-top:1rem;
+    display:flex;
+    gap:.6rem;
+    flex-wrap:wrap;
+  }
+  button{
+    font-family:var(--sans);
+    font-size:.8rem;
+    padding:.5rem 1rem;
+    border:1px solid var(--line-strong);
+    background:var(--panel);
+    color:var(--ink);
+    border-radius:4px;
+    cursor:pointer;
+  }
+  button:hover{background:var(--accent-soft); border-color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <h1>TIPS ladder maturity calculator</h1>
+      <p>13 rungs, Apr-2028 through Jan-2035 &mdash; editable par, coupon, and index ratio per rung</p>
+    </div>
+    <div class="asof">As of Jul 3, 2026</div>
+  </header>
+
+  <div class="controls">
+    <div class="control">
+      <label>Assumed annual inflation (CPI-U)</label>
+      <div class="row">
+        <input type="range" id="infl" min="0" max="6" step="0.1" value="2.5">
+        <span class="val" id="inflOut">2.5%</span>
+      </div>
+    </div>
+    <div class="control">
+      <label>Coupon frequency</label>
+      <div class="checkline" style="margin-top:.5rem;">
+        <input type="checkbox" id="semiannual" checked>
+        <label for="semiannual" style="margin:0; text-transform:none; letter-spacing:0; font-size:.8rem; color:var(--ink-soft);">Semiannual coupons (standard TIPS)</label>
+      </div>
+    </div>
+    <div class="control">
+      <label>Index ratios last set</label>
+      <div style="font-family:var(--mono); font-size:.85rem; padding-top:.3rem;" id="asOfLabel"></div>
+    </div>
+    <div class="control">
+      <label>Auto-refresh</label>
+      <button id="refreshGithub" style="width:100%;">Refresh from GitHub</button>
+    </div>
+    <div class="control">
+      <label>Reset index ratios</label>
+      <button id="resetIdx" style="width:100%;">Set all index ratios to 1.00</button>
+    </div>
+  </div>
+  <div id="refreshStatus" style="font-size:.76rem; color:var(--ink-faint); margin:-1rem 0 1.5rem; min-height:1.1em;"></div>
+
+  <details style="margin-bottom:1.75rem; border:1px solid var(--line-strong); background:var(--panel);">
+    <summary style="padding:.7rem 1rem; cursor:pointer; font-size:.82rem; font-weight:600; color:var(--accent);">Manual fallback: paste updater output directly</summary>
+    <div style="padding:0 1rem 1rem;">
+      <p style="font-size:.78rem; color:var(--ink-soft); margin:.5rem 0;">If GitHub auto-refresh isn't available (e.g. you haven't set up the repo yet, or you're offline), paste your updater's console output below and click Apply. Lines like <code>91282CGW5: 1.11071  (as of 2026-07-03)</code> are matched by CUSIP.</p>
+      <textarea id="pasteBox" rows="6" style="width:100%; font-family:var(--mono); font-size:.78rem; border:1px solid var(--line-strong); border-radius:4px; padding:.5rem;" placeholder="Paste updater output here..."></textarea>
+      <div class="actions">
+        <button id="applyPaste">Apply to table</button>
+      </div>
+    </div>
+  </details>
+
+  <div class="table-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th>Maturity</th>
+        <th>CUSIP</th>
+        <th>Coupon</th>
+        <th>Par value ($)</th>
+        <th>Current index ratio</th>
+        <th>Years out</th>
+        <th>Adj. principal</th>
+        <th>Est. coupons paid</th>
+        <th>Total nominal cash</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+    <tfoot>
+      <tr>
+        <td>Ladder total</td>
+        <td></td><td></td>
+        <td id="totPar"></td>
+        <td></td><td></td>
+        <td id="totPrin"></td>
+        <td id="totCoup"></td>
+        <td id="totAll"></td>
+      </tr>
+    </tfoot>
+  </table>
+  </div>
+
+  <div class="foot-note">
+    <strong>Auto-refresh setup.</strong> This file tries to auto-refresh index ratios from a GitHub-hosted JSON file every time it's opened, updated daily by a scheduled GitHub Action. See README.md in the project files for one-time setup steps &mdash; until you complete them, the ratios shown are the values fetched on 2026-07-03, and you can keep them current with the manual paste box below. Coupons are estimated as the real coupon rate applied to the average inflation-adjusted principal over each rung's remaining life. This tool is for informational estimation only, not tax, legal, or investment advice &mdash; TIPS principal growth is generally taxable in the year it accrues even though it isn't paid until maturity, unless held in a tax-advantaged account.
+  </div>
+
+</div>
+
+<script>
+const today = new Date('2026-07-03');
+
+const holdings = [
+  { maturity:'Apr-2028', date:'2028-04-15', cusip:'91282CGW5', rate:1.250, par:142000, idx:1.11071 },
+  { maturity:'Apr-2029', date:'2029-04-15', cusip:'91282CKL4', rate:2.125, par:150000, idx:1.07710 },
+  { maturity:'Jan-2030', date:'2030-01-15', cusip:'912828Z37', rate:0.125, par:88000,  idx:1.29490 },
+  { maturity:'Apr-2030', date:'2030-04-15', cusip:'91282CNB3', rate:1.625, par:47000,  idx:1.04658 },
+  { maturity:'Jan-2031', date:'2031-01-15', cusip:'91282CBF7', rate:0.125, par:90000,  idx:1.27981 },
+  { maturity:'Jul-2031', date:'2031-07-15', cusip:'91282CCM1', rate:0.125, par:40000,  idx:1.24302 },
+  { maturity:'Jan-2032', date:'2032-01-15', cusip:'91282CDX6', rate:0.125, par:95000,  idx:1.20185 },
+  { maturity:'Jul-2032', date:'2032-07-15', cusip:'91282CEZ0', rate:0.625, par:43000,  idx:1.14664 },
+  { maturity:'Jan-2033', date:'2033-01-15', cusip:'91282CGK1', rate:1.125, par:103000, idx:1.11844 },
+  { maturity:'Jul-2033', date:'2033-07-15', cusip:'91282CHP9', rate:1.375, par:46000,  idx:1.09696 },
+  { maturity:'Jan-2034', date:'2034-01-15', cusip:'91282CJY8', rate:1.750, par:108000, idx:1.08382 },
+  { maturity:'Jul-2034', date:'2034-07-15', cusip:'91282CLE9', rate:1.875, par:48000,  idx:1.06174 },
+  { maturity:'Jan-2035', date:'2035-01-15', cusip:'91282CML2', rate:2.125, par:354000, idx:1.05567 }
+];
+const idxAsOf = '2026-07-03';
+
+const rowsEl = document.getElementById('rows');
+const inflEl = document.getElementById('infl');
+const inflOut = document.getElementById('inflOut');
+const totPar = document.getElementById('totPar');
+const totPrin = document.getElementById('totPrin');
+const totCoup = document.getElementById('totCoup');
+const totAll = document.getElementById('totAll');
+const resetBtn = document.getElementById('resetIdx');
+const applyPasteBtn = document.getElementById('applyPaste');
+const pasteBox = document.getElementById('pasteBox');
+const asOfLabel = document.getElementById('asOfLabel');
+const refreshBtn = document.getElementById('refreshGithub');
+const refreshStatus = document.getElementById('refreshStatus');
+
+asOfLabel.textContent = idxAsOf;
+
+// EDIT THIS: replace YOUR_USERNAME/YOUR_REPO with your actual GitHub repo
+// once you've pushed this project, e.g.
+// https://raw.githubusercontent.com/ronsmith/tips-ladder/main/index_ratios.json
+const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/index_ratios.json';
+
+async function refreshFromGithub(showStatus){
+  if (showStatus) refreshStatus.textContent = 'Fetching from GitHub...';
+  try {
+    const res = await fetch(GITHUB_RAW_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const trs = rowsEl.querySelectorAll('tr');
+    let updated = 0;
+    let latestDate = '';
+    holdings.forEach((h, i) => {
+      const entry = data.ratios && data.ratios[h.cusip];
+      if (!entry) return;
+      trs[i].querySelector('[data-f="idx"]').value = Number(entry.indexRatio).toFixed(5);
+      updated++;
+      if (entry.indexDate && entry.indexDate > latestDate) latestDate = entry.indexDate;
+    });
+    if (updated > 0){
+      asOfLabel.textContent = latestDate || idxAsOf;
+      render();
+    }
+    if (showStatus){
+      refreshStatus.textContent = updated > 0
+        ? `Updated ${updated} of ${holdings.length} rungs from GitHub (as of ${latestDate}).`
+        : 'Connected, but no matching CUSIPs found in the JSON file.';
+    }
+  } catch (err) {
+    if (showStatus){
+      refreshStatus.innerHTML = `Couldn't reach GitHub \u2014 make sure GITHUB_RAW_URL in this file points to your repo, and that the repo is public. Falling back to the values already in the table. <span style="color:var(--ink-faint);">(${err.message})</span>`;
+    }
+  }
+}
+
+refreshBtn.addEventListener('click', () => refreshFromGithub(true));
+
+// Try a silent auto-refresh on load; keeps the pre-filled values if it fails.
+refreshFromGithub(false);
+
+applyPasteBtn.addEventListener('click', () => {
+  const text = pasteBox.value;
+  const lineRe = /([0-9A-Z]{8}[0-9A-Z])\s*:\s*([0-9]*\.?[0-9]+)(?:.*?(\d{4}-\d{2}-\d{2}))?/g;
+  let match;
+  let updated = 0;
+  let lastDate = '';
+  const trs = rowsEl.querySelectorAll('tr');
+  while ((match = lineRe.exec(text)) !== null){
+    const cusip = match[1];
+    const ratio = parseFloat(match[2]);
+    const date = match[3];
+    const i = holdings.findIndex(h => h.cusip === cusip);
+    if (i === -1 || isNaN(ratio)) continue;
+    trs[i].querySelector('[data-f="idx"]').value = ratio.toFixed(5);
+    updated++;
+    if (date) lastDate = date;
+  }
+  if (updated > 0){
+    if (lastDate) asOfLabel.textContent = lastDate;
+    render();
+  }
+  applyPasteBtn.textContent = updated > 0 ? `Applied ${updated} rungs` : 'No matching CUSIPs found';
+  setTimeout(() => { applyPasteBtn.textContent = 'Apply to table'; }, 2500);
+});
+
+function fmt(n){
+  return '$' + Math.round(n).toLocaleString('en-US');
+}
+function yearsOut(dateStr){
+  const d = new Date(dateStr);
+  return (d - today) / (1000*60*60*24*365.25);
+}
+
+holdings.forEach((h, i) => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="maturity">${h.maturity}</td>
+    <td class="cusip">${h.cusip}</td>
+    <td><input type="number" step="0.001" value="${h.rate}" data-i="${i}" data-f="rate" style="text-align:right;"> %</td>
+    <td><input type="number" step="1000" value="${h.par}" data-i="${i}" data-f="par"></td>
+    <td><input type="number" step="0.00001" value="${h.idx.toFixed(5)}" data-i="${i}" data-f="idx"></td>
+    <td class="years">${yearsOut(h.date).toFixed(1)}</td>
+    <td class="out-prin">&mdash;</td>
+    <td class="out-coup">&mdash;</td>
+    <td class="out-total total-cash">&mdash;</td>
+  `;
+  rowsEl.appendChild(tr);
+});
+
+function readRow(tr, i){
+  const rate = parseFloat(tr.querySelector('[data-f="rate"]').value) || 0;
+  const par = parseFloat(tr.querySelector('[data-f="par"]').value) || 0;
+  const idx = parseFloat(tr.querySelector('[data-f="idx"]').value) || 1;
+  return { rate: rate/100, par, idx, yrs: yearsOut(holdings[i].date) };
+}
+
+function render(){
+  const inflRate = parseFloat(inflEl.value)/100;
+  inflOut.textContent = inflEl.value + '%';
+
+  let sumPar = 0, sumPrin = 0, sumCoup = 0;
+  const trs = rowsEl.querySelectorAll('tr');
+
+  trs.forEach((tr, i) => {
+    const { rate, par, idx, yrs } = readRow(tr, i);
+    const idxAtMaturity = idx * Math.pow(1+inflRate, yrs);
+    const adjPrincipal = Math.max(par, par * idxAtMaturity);
+    const avgIdx = idx * Math.pow(1+inflRate, yrs/2);
+    const avgPrincipal = par * avgIdx;
+    const coupons = avgPrincipal * rate * yrs;
+    const totalCash = adjPrincipal + coupons;
+
+    sumPar += par;
+    sumPrin += adjPrincipal;
+    sumCoup += coupons;
+
+    tr.querySelector('.out-prin').textContent = fmt(adjPrincipal);
+    tr.querySelector('.out-coup').textContent = fmt(coupons);
+    tr.querySelector('.out-total').textContent = fmt(totalCash);
+  });
+
+  totPar.textContent = fmt(sumPar);
+  totPrin.textContent = fmt(sumPrin);
+  totCoup.textContent = fmt(sumCoup);
+  totAll.textContent = fmt(sumPrin + sumCoup);
+}
+
+rowsEl.addEventListener('input', render);
+inflEl.addEventListener('input', render);
+
+resetBtn.addEventListener('click', () => {
+  rowsEl.querySelectorAll('[data-f="idx"]').forEach(inp => inp.value = '1.00');
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
