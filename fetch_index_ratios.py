@@ -49,7 +49,18 @@ def fetch_ratio(cusip):
     if not data:
         raise ValueError(f"No data returned for {cusip}")
 
-    match = next((d for d in data if d.get("cusip") == cusip), data[0])
+    entries = [d for d in data if d.get("cusip") == cusip] or data
+
+    # TreasuryDirect publishes Index Ratios roughly a month into the future
+    # (Reference CPI is interpolated from known CPI-U releases, which allows
+    # forward calculation). Sorting desc and taking the first entry grabs the
+    # furthest-future date, not today's. We want the most recent entry whose
+    # date is today or earlier.
+    today_str = datetime.now(timezone.utc).date().isoformat()
+    past_or_today = [d for d in entries if (d.get("indexDate") or "")[:10] <= today_str]
+    match = max(past_or_today, key=lambda d: d.get("indexDate", "")) if past_or_today \
+        else min(entries, key=lambda d: d.get("indexDate", ""))
+
     return {
         "cusip": cusip,
         "indexRatio": float(match["dailyIndex"]),
