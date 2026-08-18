@@ -1,70 +1,70 @@
 {
-  "generatedAt": "2026-08-17T13:31:35+00:00",
+  "generatedAt": "2026-08-18T13:34:22+00:00",
   "ratios": {
     "91282CGW5": {
       "cusip": "91282CGW5",
-      "indexRatio": 1.11525,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.11512,
+      "indexDate": "2026-08-18"
     },
     "91282CKL4": {
       "cusip": "91282CKL4",
-      "indexRatio": 1.08151,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.08138,
+      "indexDate": "2026-08-18"
     },
     "912828Z37": {
       "cusip": "912828Z37",
-      "indexRatio": 1.30019,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.30005,
+      "indexDate": "2026-08-18"
     },
     "91282CNB3": {
       "cusip": "91282CNB3",
-      "indexRatio": 1.05086,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.05074,
+      "indexDate": "2026-08-18"
     },
     "91282CBF7": {
       "cusip": "91282CBF7",
-      "indexRatio": 1.28505,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.2849,
+      "indexDate": "2026-08-18"
     },
     "91282CCM1": {
       "cusip": "91282CCM1",
-      "indexRatio": 1.24811,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.24797,
+      "indexDate": "2026-08-18"
     },
     "91282CDX6": {
       "cusip": "91282CDX6",
-      "indexRatio": 1.20677,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.20663,
+      "indexDate": "2026-08-18"
     },
     "91282CEZ0": {
       "cusip": "91282CEZ0",
-      "indexRatio": 1.15134,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.15121,
+      "indexDate": "2026-08-18"
     },
     "91282CGK1": {
       "cusip": "91282CGK1",
-      "indexRatio": 1.12301,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.12289,
+      "indexDate": "2026-08-18"
     },
     "91282CHP9": {
       "cusip": "91282CHP9",
-      "indexRatio": 1.10145,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.10132,
+      "indexDate": "2026-08-18"
     },
     "91282CJY8": {
       "cusip": "91282CJY8",
-      "indexRatio": 1.08825,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.08813,
+      "indexDate": "2026-08-18"
     },
     "91282CLE9": {
       "cusip": "91282CLE9",
-      "indexRatio": 1.06608,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.06596,
+      "indexDate": "2026-08-18"
     },
     "91282CML2": {
       "cusip": "91282CML2",
-      "indexRatio": 1.05999,
-      "indexDate": "2026-08-17"
+      "indexRatio": 1.05987,
+      "indexDate": "2026-08-18"
     }
   }
 }
