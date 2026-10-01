@@ -1,70 +1,70 @@
 {
-  "generatedAt": "2026-09-30T18:11:42+00:00",
+  "generatedAt": "2026-10-01T18:36:58+00:00",
   "ratios": {
     "91282CGW5": {
       "cusip": "91282CGW5",
       "indexRatio": 1.11325,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "91282CKL4": {
       "cusip": "91282CKL4",
       "indexRatio": 1.07957,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "912828Z37": {
       "cusip": "912828Z37",
       "indexRatio": 1.29786,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "91282CNB3": {
       "cusip": "91282CNB3",
       "indexRatio": 1.04897,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "91282CBF7": {
       "cusip": "91282CBF7",
       "indexRatio": 1.28274,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "91282CCM1": {
       "cusip": "91282CCM1",
       "indexRatio": 1.24587,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "91282CDX6": {
       "cusip": "91282CDX6",
       "indexRatio": 1.2046,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "91282CEZ0": {
       "cusip": "91282CEZ0",
       "indexRatio": 1.14927,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "91282CGK1": {
       "cusip": "91282CGK1",
       "indexRatio": 1.121,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "91282CHP9": {
       "cusip": "91282CHP9",
       "indexRatio": 1.09947,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "91282CJY8": {
       "cusip": "91282CJY8",
       "indexRatio": 1.0863,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "91282CLE9": {
       "cusip": "91282CLE9",
       "indexRatio": 1.06417,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     },
     "91282CML2": {
       "cusip": "91282CML2",
       "indexRatio": 1.05809,
-      "indexDate": "2026-09-30"
+      "indexDate": "2026-10-01"
     }
   }
 }
