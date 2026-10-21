@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T05:49:43+00:00",
+  "generatedAt": "2026-10-21T06:04:33+00:00",
   "ratios": {
     "91282CGW5": {
       "cusip": "91282CGW5",
@@ -92,5 +92,11 @@
       "baseCpi": 315.5881,
       "source": "calculated from CPI-U"
     }
+  },
+  "inflation": {
+    "breakeven5y": 2.39,
+    "breakeven10y": 2.35,
+    "asOf": "2026-10-20",
+    "source": "FRED T5YIE / T10YIE"
   }
 }
