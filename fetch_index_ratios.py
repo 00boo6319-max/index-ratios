@@ -16,7 +16,8 @@ monthly CPI numbers are known, today's Index Ratio can be calculated exactly,
 the same way TreasuryDirect does.
 
 This script:
-  1. Downloads monthly CPI-U (FRED first, BLS as backup).
+  1. Downloads monthly CPI-U (FRED first, BLS as backup), plus the market's
+     inflation forecast (5- and 10-year Treasury breakeven rates from FRED).
   2. Gets each bond's base Reference CPI (saved in index_ratios.json after the
      first run; otherwise from TreasuryDirect, otherwise derived from the
      last good Index Ratio already in index_ratios.json).
@@ -56,6 +57,7 @@ OUTPUT = "index_ratios.json"
 UA = "tips-ladder-updater/2.0 (github actions)"
 
 FRED_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=CPIAUCNS"
+FRED_SERIES_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series}"
 BLS_URL = "https://api.bls.gov/publicAPI/v2/timeseries/data/CUUR0000SA0"
 TD_SECURITY_URL = "https://www.treasurydirect.gov/TA_WS/securities/search?cusip={cusip}&format=json"
 TD_INDEX_URL = (
@@ -175,6 +177,40 @@ def latest_ref_cpi(today, cpi):
     return None, None
 
 
+# ------------------------------------------- market inflation forecast --
+
+def latest_fred_value(series):
+    """Most recent non-blank daily value of a FRED series, as (date, value)."""
+    text = http_get(FRED_SERIES_URL.format(series=series), accept="text/csv")
+    last = None
+    for row in list(csv.reader(io.StringIO(text)))[1:]:
+        if len(row) >= 2:
+            try:
+                v = float(row[1])
+            except ValueError:
+                continue
+            last = (row[0].strip(), v)
+    if not last:
+        raise ValueError(f"no values in {series}")
+    return last
+
+
+def load_breakevens():
+    """Market-implied inflation (Treasury breakeven rates), or None."""
+    try:
+        d5, be5 = latest_fred_value("T5YIE")
+        d10, be10 = latest_fred_value("T10YIE")
+    except Exception as exc:
+        print(f"Breakeven inflation unavailable: {exc}")
+        return None
+    if not (-2 < be5 < 15 and -2 < be10 < 15):
+        print(f"Breakeven inflation looked wrong ({be5}, {be10}); skipped")
+        return None
+    print(f"Breakeven inflation: 5-yr {be5:.2f}% ({d5}), 10-yr {be10:.2f}% ({d10})")
+    return {"breakeven5y": be5, "breakeven10y": be10, "asOf": max(d5, d10),
+            "source": "FRED T5YIE / T10YIE"}
+
+
 # ------------------------------------------------------- TreasuryDirect --
 
 def base_cpi_from_td(cusip):
@@ -215,6 +251,7 @@ def main():
     today_str = today.isoformat()
     previous = load_previous()
     cpi = load_cpi()
+    inflation = load_breakevens()
     calc_date, calc_ref = latest_ref_cpi(today, cpi) if cpi else (None, None)
     if calc_date:
         print(f"Reference CPI for {calc_date} = {calc_ref}\n")
@@ -269,9 +306,20 @@ def main():
                 results[cusip] = prev
             print(f"  {cusip}: FAILED - kept previous value {prev.get('indexRatio')} ({prev.get('indexDate')})")
 
+    out = {"generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+           "ratios": results}
+    if inflation is None:
+        # Keep yesterday's forecast rather than dropping it.
+        try:
+            with open(OUTPUT) as f:
+                inflation = json.load(f).get("inflation")
+        except Exception:
+            inflation = None
+    if inflation:
+        out["inflation"] = inflation
+
     with open(OUTPUT, "w") as f:
-        json.dump({"generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                   "ratios": results}, f, indent=2)
+        json.dump(out, f, indent=2)
         f.write("\n")
 
     print(f"\nUpdated {len(CUSIPS) - len(problems)} of {len(CUSIPS)} CUSIPs.")
