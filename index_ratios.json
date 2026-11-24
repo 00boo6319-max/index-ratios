@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-24T00:40:50+00:00",
+  "generatedAt": "2026-11-24T22:57:37+00:00",
   "ratios": {
     "91282CGW5": {
       "cusip": "91282CGW5",
@@ -94,9 +94,9 @@
     }
   },
   "inflation": {
-    "breakeven5y": 2.15,
-    "breakeven10y": 2.13,
-    "asOf": "2026-11-23",
+    "breakeven5y": 2.11,
+    "breakeven10y": 2.12,
+    "asOf": "2026-11-24",
     "source": "FRED T5YIE / T10YIE"
   }
 }
