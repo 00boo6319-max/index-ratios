@@ -1,102 +1,102 @@
 {
-  "generatedAt": "2026-11-24T22:57:37+00:00",
+  "generatedAt": "2026-11-25T22:17:44+00:00",
   "ratios": {
     "91282CGW5": {
       "cusip": "91282CGW5",
-      "indexRatio": 1.1218,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.12201,
+      "indexDate": "2026-11-25",
       "baseCpi": 299.94966,
       "source": "calculated from CPI-U"
     },
     "91282CKL4": {
       "cusip": "91282CKL4",
-      "indexRatio": 1.08786,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.08807,
+      "indexDate": "2026-11-25",
       "baseCpi": 309.30687,
       "source": "calculated from CPI-U"
     },
     "912828Z37": {
       "cusip": "912828Z37",
-      "indexRatio": 1.30783,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.30808,
+      "indexDate": "2026-11-25",
       "baseCpi": 257.28299,
       "source": "calculated from CPI-U"
     },
     "91282CNB3": {
       "cusip": "91282CNB3",
-      "indexRatio": 1.05702,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.05723,
+      "indexDate": "2026-11-25",
       "baseCpi": 318.3307,
       "source": "calculated from CPI-U"
     },
     "91282CBF7": {
       "cusip": "91282CBF7",
-      "indexRatio": 1.29259,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.29284,
+      "indexDate": "2026-11-25",
       "baseCpi": 260.31701,
       "source": "calculated from CPI-U"
     },
     "91282CCM1": {
       "cusip": "91282CCM1",
-      "indexRatio": 1.25543,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.25568,
+      "indexDate": "2026-11-25",
       "baseCpi": 268.0215,
       "source": "calculated from CPI-U"
     },
     "91282CDX6": {
       "cusip": "91282CDX6",
-      "indexRatio": 1.21385,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.21408,
+      "indexDate": "2026-11-25",
       "baseCpi": 277.20326,
       "source": "calculated from CPI-U"
     },
     "91282CEZ0": {
       "cusip": "91282CEZ0",
-      "indexRatio": 1.1581,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.15832,
+      "indexDate": "2026-11-25",
       "baseCpi": 290.54757,
       "source": "calculated from CPI-U"
     },
     "91282CGK1": {
       "cusip": "91282CGK1",
-      "indexRatio": 1.1296,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.12982,
+      "indexDate": "2026-11-25",
       "baseCpi": 297.87647,
       "source": "calculated from CPI-U"
     },
     "91282CHP9": {
       "cusip": "91282CHP9",
-      "indexRatio": 1.10791,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.10813,
+      "indexDate": "2026-11-25",
       "baseCpi": 303.7087,
       "source": "calculated from CPI-U"
     },
     "91282CJY8": {
       "cusip": "91282CJY8",
-      "indexRatio": 1.09464,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.09485,
+      "indexDate": "2026-11-25",
       "baseCpi": 307.39071,
       "source": "calculated from CPI-U"
     },
     "91282CLE9": {
       "cusip": "91282CLE9",
-      "indexRatio": 1.07235,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.07255,
+      "indexDate": "2026-11-25",
       "baseCpi": 313.78188,
       "source": "calculated from CPI-U"
     },
     "91282CML2": {
       "cusip": "91282CML2",
-      "indexRatio": 1.06621,
-      "indexDate": "2026-11-24",
+      "indexRatio": 1.06642,
+      "indexDate": "2026-11-25",
       "baseCpi": 315.5881,
       "source": "calculated from CPI-U"
     }
   },
   "inflation": {
-    "breakeven5y": 2.11,
+    "breakeven5y": 2.13,
     "breakeven10y": 2.12,
-    "asOf": "2026-11-24",
+    "asOf": "2026-11-25",
     "source": "FRED T5YIE / T10YIE"
   }
 }
